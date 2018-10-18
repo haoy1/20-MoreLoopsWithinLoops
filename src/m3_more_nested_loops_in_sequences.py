@@ -3,13 +3,13 @@ This project demonstrates NESTED LOOPS (i.e., loops within loops)
 in the context of SEQUENCES OF SUB-SEQUENCES.
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Brandon Hao.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 
 def main():
     """ Calls the other functions to test them. """
-    run_test_largest_number()
+    #run_test_largest_number()
     run_test_largest_negative_number()
     run_test_first_is_elsewhere_too()
 
@@ -17,7 +17,7 @@ def main():
 def run_test_largest_number():
     """ Tests the    largest_number    function. """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement this TEST function.
+    # TO: 2. Implement this TEST function.
     #   It TESTS the  largest_number  function defined below.
     #   Include at least ** 1 ** ADDITIONAL test beyond those we wrote.
     # ------------------------------------------------------------------
@@ -44,6 +44,15 @@ def run_test_largest_number():
     print('Expected and actual are:', expected, answer)
 
     # TO DO 2 (continued): Add your ADDITIONAL test(s) here:
+
+    # Test 4:
+    expected = 14
+    answer = largest_number([(-9, 1, -100),
+                             (1, 10, 11, 12, 14),
+                             [1, 2, 3, 4],
+                             [13, 3]])
+
+    print('Expected and actual are:', expected, answer)
 
 
 def largest_number(seq_seq):
@@ -72,9 +81,32 @@ def largest_number(seq_seq):
     where each subsequence contains only numbers.
     """
     # ------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # DONE: 3. Implement and test this function.
     #   Note that you should write its TEST function first (above).
     # ------------------------------------------------------------------
+    seq = []
+    n = 0
+    count = 0
+    for k in range(len(seq_seq)):
+        if len(seq_seq[k]) == 0:
+            count = count + 1
+        elif len(seq_seq[k]) == 1:
+            n = seq_seq[k][0]
+
+        for i in range(len(seq_seq[k]) - 1):
+            n = seq_seq[k][0]
+            if seq_seq[k][i] > n:
+                n = seq_seq[k][i+1]
+        seq = seq + [n]
+
+        if count == len(seq_seq):
+            return None
+
+    for j in range(len(seq) - 1):
+        if seq[j+1] > n:
+            n = seq[j+1]
+
+    return n
 
 
 def run_test_largest_negative_number():
@@ -90,6 +122,48 @@ def run_test_largest_negative_number():
     print('-------------------------------------------------')
     print('Testing the   LARGEST_NEGATIVE_NUMBER   function:')
     print('-------------------------------------------------')
+
+    # Test 1:
+    expected = -3
+    answer = largest_negative_number([(-3, 1, 4),
+                             (13, 10, 11, 7, 10),
+                             [1, 2, 3, 4]])
+    print('Expected and actual are:', expected, answer)
+
+    # Test 2:
+    expected = -1111111111111111
+    answer = largest_negative_number(([], [-1111111111111111], []))
+    print('Expected and actual are:', expected, answer)
+
+    # Test 3:
+    expected = None
+    answer = largest_negative_number(([], [], []))
+    print('Expected and actual are:', expected, answer)
+
+    # TO DO 2 (continued): Add your ADDITIONAL test(s) here:
+
+    # Test 4:
+    expected = -1
+    answer = largest_negative_number([(-9, 1, -100),
+                             (1, 10, 11, 12, 14),
+                             [-1, 2, 3, 4],
+                             [13, 3]])
+
+    print('Expected and actual are:', expected, answer)
+
+    # Test 5:
+    expected = None
+    answer = largest_negative_number([(9, 1, 100),
+                             (1, 10, 11, 12, 14),
+                             [1, 2, 3, 4],
+                             [13, 3]])
+
+    print('Expected and actual are:', expected, answer)
+
+    # Test 6:
+    expected = None
+    answer = largest_negative_number(([], [11111], []))
+    print('Expected and actual are:', expected, answer)
 
 
 def largest_negative_number(seq_seq):
@@ -122,6 +196,34 @@ def largest_negative_number(seq_seq):
     #   being constructed (so the SPACE allowed is limited to the
     #   give sequence of sequences plus any non-list variables you want).
     # ------------------------------------------------------------------
+    a = 0
+    b = 0
+    count = 0        # no number is in this subsequence
+    add_count = 0    # how many none-negative numbers are there in this subsequence
+    add_count_1 = 0  # how many add_counts are there in seq_seq
+    for k in range(len(seq_seq)):
+        if len(seq_seq[k]) == 0:
+            count = count + 1
+        else:
+            for i in range(len(seq_seq[k])):
+                if seq_seq[k][i] < 0:
+                    a = k
+                    b = i
+                    if seq_seq[k][i] > seq_seq[a][b]:
+                        a = k
+                        b = i
+                else:
+                    add_count = add_count + 1
+
+        if add_count == len(seq_seq[k]):
+            add_count_1 = add_count_1 + 1
+
+        add_count = 0
+
+    if add_count_1 == len(seq_seq):
+        return None
+
+    return seq_seq[a][b]
 
 
 def run_test_first_is_elsewhere_too():
